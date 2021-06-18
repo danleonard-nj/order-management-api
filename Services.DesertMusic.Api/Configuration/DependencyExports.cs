@@ -7,6 +7,8 @@ using Services.DesertMusic.Api.Components;
 using Services.DesertMusic.Api.Components.AuthenticationComponent;
 using Services.DesertMusic.Api.Components.ReverbSyncComponent;
 using Services.DesertMusic.Api.Components.ReverbSyncComponent.Data;
+using Services.DesertMusic.Api.Components.ShipperComponent;
+using Services.DesertMusic.Api.Components.ShipperComponent.Data;
 using System.Collections.Generic;
 
 namespace Services.DesertMusic.Api.Configuration
@@ -26,15 +28,18 @@ namespace Services.DesertMusic.Api.Configuration
 								// Data
 
 								new ServiceExport<IReverbSyncRepository, ReverbSyncRepository>(),
+								new ServiceExport<IShipperRepository, ShipperRepository>(),
 
 								// Components
 
 								new ServiceExport<IReverbSyncComponent, ReverbSyncComponent>(),
 								new ServiceExport<IAuthenticationComponent, AuthenticationComponent>(),
+								new ServiceExport<IShipperComponent, ShipperComponent>(),
 
 								// Providers
 
-								new ServiceExport<IAuthenticationProvider, AuthenticationProvider>()
+								new ServiceExport<IAuthenticationProvider, AuthenticationProvider>(),
+								new ServiceExport<IShipperProvider, ShipperProvider>()
 						};
 
 						return services;
@@ -45,7 +50,8 @@ namespace Services.DesertMusic.Api.Configuration
 						var settings = new List<ISettingsExport>
 						{
 								new SettingsExport<ReverbClientSettings>(),
-								new SettingsExport<ReverbSyncRepositorySettings>()
+								new SettingsExport<ReverbSyncRepositorySettings>(),
+								new SettingsExport<ShipperRepositorySettings>()
 						};
 
 						return settings;

@@ -1,10 +1,8 @@
-﻿using Common.Utilities.Extensions;
-using Common.Utilities.Helpers;
+﻿using Common.Utilities.Helpers;
 using Microsoft.Extensions.Logging;
 using Services.DesertMusic.Api.Clients.Reverb;
 using Services.DesertMusic.Api.Clients.Reverb.Models.Orders;
 using Services.DesertMusic.Api.Components.ReverbSyncComponent.Data;
-using Services.DesertMusic.Api.Components.ReverbSyncComponent.Domain;
 using Services.DesertMusic.Api.Components.ReverbSyncComponent.Extensions;
 using Services.DesertMusic.Api.Utilities.Threading;
 using System;
