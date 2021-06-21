@@ -12,9 +12,9 @@
  */
 
 
-namespace Services.DesertMusic.Api.Components.ProcurementComponent
+namespace Services.DesertMusic.Api.Components.Purchasing
 {
-		public class ProcurementComponent
+		public class PurchasingComponent
 		{
 		}
 }
