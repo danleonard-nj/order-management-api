@@ -15,6 +15,7 @@ namespace Services.DesertMusic.Api.Components.ShipperComponent
 				Task<ShipperModel> GetDefaultShipper();
 				Task<ShipperModel> GetShipper(int shipperId, bool isActive = true);
 				Task<IEnumerable<ShipperModel>> GetShippers(bool isActive = true);
+				Task<bool> UpdateDefaultShipper(int shipperId);
 				Task<bool> UpdateShipper(ShipperModel model);
 		}
 
@@ -65,6 +66,25 @@ namespace Services.DesertMusic.Api.Components.ShipperComponent
 						var model = shipper?.ToModel();
 
 						return model;
+				}
+
+				public async Task<bool> UpdateDefaultShipper(int shipperId)
+				{
+						var currentDefault = await _shipperRepository.GetDefaultShipper();
+
+						if (currentDefault != default)
+						{
+								currentDefault.IsDefault = false;
+
+								await _shipperRepository.UpdateShipper(currentDefault);
+						}
+
+						var updatedDefault = await _shipperRepository.GetShipper(shipperId);
+						updatedDefault.IsDefault = true;
+
+						await _shipperRepository.UpdateShipper(updatedDefault);
+
+						return true;
 				}
 
 				public async Task<bool> CreateShipper(ShipperModel model)

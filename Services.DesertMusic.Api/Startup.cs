@@ -1,3 +1,4 @@
+using Common.Models.AspNetCore.Options;
 using Common.Utilities.AspNetCore.Extensions;
 using Common.Utilities.Authentication.Jwt.Configuration;
 using Common.Utilities.Middleware.Authentication;
@@ -14,9 +15,12 @@ namespace Services.DesertMusic.Api
 {
 		public class Startup
 		{
-				public Startup(IConfiguration configuration)
+				public Startup(IConfiguration configuration,
+						IWebHostEnvironment hostEnvironment)
 				{
 						Configuration = configuration;
+
+						_hostEnvironment = hostEnvironment;
 				}
 
 				public IConfiguration Configuration { get; }
@@ -26,7 +30,14 @@ namespace Services.DesertMusic.Api
 				{
 						services.AddControllers();
 
-						services.ConfigureAspNetCoreServices<DependencyExports>();
+						var aspNetCoreOptions = new ConfigureAspNetCoreServicesOptions();
+
+						if (_hostEnvironment.IsProduction())
+						{
+								aspNetCoreOptions.InjectKeyVaultSecrets = true;
+						}
+
+						services.ConfigureAspNetCoreServices<DependencyExports>(aspNetCoreOptions);
 
 						services.ConfigureJwtAuthentication(Configuration);
 				}
@@ -56,5 +67,7 @@ namespace Services.DesertMusic.Api
 								endpoints.MapControllers();
 						});
 				}
+
+				private readonly IWebHostEnvironment _hostEnvironment;
 		}
 }

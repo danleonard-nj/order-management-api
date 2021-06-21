@@ -30,7 +30,7 @@ namespace Services.DesertMusic.Api.Clients.Reverb
 				{
 						var response = await _flurlClient
 								.Request(_settings.Orders)
-								.WithOAuthBearerToken(_settings.Token)
+								.WithOAuthBearerToken(_settings.ReverbBearerToken)
 								.SetQueryParam("page", pageNumber)
 								.GetAsync()
 								.ReceiveJson<OrdersModel>();

@@ -10,11 +10,12 @@ namespace Services.DesertMusic.Api.Components
 		public interface IShipperProvider
 		{
 				Task<bool> CreateShipper(ShipperModel model);
+				Task<bool> DeleteShipper(int shipperId);
 				Task<ShipperModel> GetDefaultShipper();
 				Task<ShipperModel> GetShipper(int shipperId);
 				Task<IEnumerable<ShipperModel>> GetShippers();
+				Task<bool> UpdateDefaultShipper(int shipperId);
 				Task<bool> UpdateShipper(ShipperModel model);
-				Task<bool> DeleteShipper(int shipperId);
 		}
 
 		public class ShipperProvider : IShipperProvider
@@ -62,6 +63,13 @@ namespace Services.DesertMusic.Api.Components
 				public async Task<bool> DeleteShipper(int shipperId)
 				{
 						var result = await _shipperComponent.DeleteShipper(shipperId);
+
+						return result;
+				}
+
+				public async Task<bool> UpdateDefaultShipper(int shipperId)
+				{
+						var result = await _shipperComponent.UpdateDefaultShipper(shipperId);
 
 						return result;
 				}

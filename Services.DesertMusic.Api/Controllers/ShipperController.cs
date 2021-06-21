@@ -67,6 +67,14 @@ namespace Services.DesertMusic.Api.Controllers
 						return result.ToResponse();
 				}
 
+				[HttpPut("{shipperId}/Default")]
+				public async Task<IActionResult> UpdateDefaultShipper(int shipperId)
+				{
+						var result = await _shipperProvider.UpdateDefaultShipper(shipperId);
+
+						return result.ToResponse();
+				}
+
 				private readonly IShipperProvider _shipperProvider;
 		}
 
