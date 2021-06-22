@@ -32,13 +32,21 @@ namespace Services.DesertMusic.Api.Controllers
 						_authenticationProvider = authenticationProvider ?? throw new ArgumentNullException(nameof(authenticationProvider));
 				}
 				
-				[HttpPost("User/Authenticate")]
+				[HttpPost("Authenticate")]
 				[BypassAuthentication]
 				public async Task<IActionResult> AuthenticateUser(AuthenticationModel model)
 				{
 						var token = await _authenticationProvider.Authenticate(model);
 
 						return token.ToResponse();
+				}
+
+				[HttpGet("Refresh")]
+				public async Task<IActionResult> Refresh()
+				{
+						var refreshToken = await _authenticationProvider.GetRefreshToken(Request);
+
+						return refreshToken.ToResponse();
 				}
 
 				[HttpPost("User/Create")]

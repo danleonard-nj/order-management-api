@@ -12,10 +12,11 @@
  */
 
 
-using Common.Utilities.Authentication.Attributes;
 using Common.Utilities.UserManagement.Models;
+using Microsoft.AspNetCore.Http;
 using Services.DesertMusic.Api.Components.AuthenticationComponent;
 using Services.DesertMusic.Api.Models.Authentication;
+using Services.DesertMusic.Api.Utilities.Extensions;
 using System.Threading.Tasks;
 
 namespace Services.DesertMusic.Api.Components
@@ -24,6 +25,7 @@ namespace Services.DesertMusic.Api.Components
 		{
 				Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel);
 				Task<UserModel> CreateUser(UserModel model);
+				Task<TokenResponseModel> GetRefreshToken(HttpRequest request);
 		}
 
 		public class AuthenticationProvider : IAuthenticationProvider
@@ -38,6 +40,15 @@ namespace Services.DesertMusic.Api.Components
 						var token = await _authenticationComponent.Authenticate(authenticationModel);
 
 						return token;
+				}
+
+				public async Task<TokenResponseModel> GetRefreshToken(HttpRequest request)
+				{
+						var bearer = request.GetBearer();
+
+						var refreshToken = await _authenticationComponent.GetRefreshToken(bearer);
+
+						return refreshToken;
 				}
 
 				public async Task<UserModel> CreateUser(UserModel model)

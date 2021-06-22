@@ -12,6 +12,7 @@
  */
 
 
+using Common.Utilities.Authentication.Jwt;
 using Common.Utilities.Helpers;
 using Common.Utilities.UserManagement.Components;
 using Common.Utilities.UserManagement.Models;
@@ -26,13 +27,16 @@ namespace Services.DesertMusic.Api.Components.AuthenticationComponent
 		{
 				Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel);
 				Task<UserModel> CreateUser(UserModel model);
+				Task<TokenResponseModel> GetRefreshToken(string token);
 		}
 
 		public class AuthenticationComponent : IAuthenticationComponent
 		{
-				public AuthenticationComponent(IUserManagementComponent userManagementComponent)
+				public AuthenticationComponent(IUserManagementComponent userManagementComponent,
+						IJwtTokenUtility jwtTokenUtility)
 				{
-						_userManagementComponent = userManagementComponent;
+						_userManagementComponent = userManagementComponent ?? throw new ArgumentNullException(nameof(userManagementComponent));
+						_jwtTokenUtility = jwtTokenUtility ?? throw new ArgumentNullException(nameof(jwtTokenUtility));
 				}
 
 				public async Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel)
@@ -62,6 +66,21 @@ namespace Services.DesertMusic.Api.Components.AuthenticationComponent
 						}
 				}
 
+				public async Task<TokenResponseModel> GetRefreshToken(string token)
+				{
+						await Task.Yield();
+
+						var refreshToken = _jwtTokenUtility.GetRefreshToken(token);
+
+						var response = new TokenResponseModel
+						{
+								IsAuthenticated = true,
+								Token = refreshToken
+						};
+
+						return response;
+				}
+
 				public async Task<UserModel> CreateUser(UserModel model)
 				{
 						var user = await _userManagementComponent.CreateUser(model);
@@ -75,5 +94,6 @@ namespace Services.DesertMusic.Api.Components.AuthenticationComponent
 				}
 
 				private readonly IUserManagementComponent _userManagementComponent;
+				private readonly IJwtTokenUtility _jwtTokenUtility;
 		}
 }
