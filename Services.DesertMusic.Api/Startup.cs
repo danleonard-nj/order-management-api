@@ -12,13 +12,11 @@
  */
 
 
-using Common.Models.AspNetCore.Options;
 using Common.Utilities.AspNetCore.Extensions;
 using Common.Utilities.Authentication.Jwt.Configuration;
-using Common.Utilities.Configuration;
-using Common.Utilities.Configuration.Managed;
 using Common.Utilities.Middleware.Authentication;
 using Common.Utilities.Swagger;
+using Common.Utilities.UserManagement.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

@@ -12,6 +12,7 @@
  */
 
 
+using Common.Utilities.Authentication.Attributes;
 using Common.Utilities.UserManagement.Models;
 using Services.DesertMusic.Api.Components.AuthenticationComponent;
 using Services.DesertMusic.Api.Models.Authentication;

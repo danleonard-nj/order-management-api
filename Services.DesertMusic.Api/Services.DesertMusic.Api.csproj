@@ -12,13 +12,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Common.Utilities.AspNetCore" Version="2.3.4" />
+    <PackageReference Include="Common.Utilities.AspNetCore" Version="2.3.6" />
     <PackageReference Include="Flurl.Http" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\ItemComponent\Data\" />
+    <Folder Include="Components\LinkingComponent\Data\" />
+    <Folder Include="Components\OrderComponent\Data\" />
     <Folder Include="Components\PurchasingComponent\Data\" />
-    <Folder Include="Components\PurchasingComponent\Domain\" />
+    <Folder Include="Components\ShipmentComponent\Data\" />
   </ItemGroup>
 
 
