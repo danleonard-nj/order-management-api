@@ -15,7 +15,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess",
+      "ancmHostingModel": "OutOfProcess",
       "nativeDebugging": true
     },
     "Services.DesertMusic.Api": {
