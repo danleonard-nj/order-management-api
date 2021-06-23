@@ -17,6 +17,7 @@ using Common.Utilities.Authentication.Jwt.Configuration;
 using Common.Utilities.Middleware.Authentication;
 using Common.Utilities.Swagger;
 using Common.Utilities.UserManagement.Settings;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -49,6 +50,9 @@ namespace Services.DesertMusic.Api
 						services.ConfigureAspNetCoreServices<DependencyExports>(_hostEnvironment);
 
 						services.ConfigureJwtAuthentication(Configuration);
+
+						services.AddApplicationInsightsTelemetry();
+
 				}
 
 				// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
