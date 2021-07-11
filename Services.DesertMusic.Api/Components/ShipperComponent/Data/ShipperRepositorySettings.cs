@@ -12,10 +12,13 @@
  */
 
 
+using Common.Utilities.Configuration.AzureKeyVault.Attributes;
+
 namespace Services.DesertMusic.Api.Components.ShipperComponent.Data
 {
 		public class ShipperRepositorySettings
 		{
+				[AzureKeyVaultSecret]
 				public string SqlConnectionString { get; set; }
 		}
 }
