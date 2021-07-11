@@ -11,6 +11,7 @@
  * for more details.
  */
 
+
 namespace Services.DesertMusic.Api.Models.Shipper
 {
 		public class ShipperModel

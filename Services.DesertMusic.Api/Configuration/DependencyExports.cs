@@ -16,10 +16,15 @@ using Common.Utilities.DependencyInjection;
 using Common.Utilities.DependencyInjection.Exports.Types;
 using Common.Utilities.DependencyInjection.Exports.Types.Abstractions;
 using Flurl.Http.Configuration;
+using Services.DesertMusic.Api.Clients.Reverb;
 using Services.DesertMusic.Api.Components;
 using Services.DesertMusic.Api.Components.AuthenticationComponent;
+using Services.DesertMusic.Api.Components.ReverbSyncComponent;
+using Services.DesertMusic.Api.Components.ReverbSyncComponent.Data;
 using Services.DesertMusic.Api.Components.ShipperComponent;
 using Services.DesertMusic.Api.Components.ShipperComponent.Data;
+using Services.DesertMusic.Api.Components.User;
+using Services.DesertMusic.Api.Components.User.Data;
 using System.Collections.Generic;
 
 namespace Services.DesertMusic.Api.Configuration
@@ -32,19 +37,28 @@ namespace Services.DesertMusic.Api.Configuration
 						{
 								new ServiceExport<IFlurlClientFactory, PerBaseUrlFlurlClientFactory>(RegistrationType.Singleton),
 
+								// Clients
+
+								new ServiceExport<IReverbClient, ReverbClient>(RegistrationType.Scoped),
+
 								// Data
 
-								new ServiceExport<IShipperRepository, ShipperRepository>(),
+								new ServiceExport<IReverbSyncRepository, ReverbSyncRepository>(RegistrationType.Scoped),
+								new ServiceExport<IShipperRepository, ShipperRepository>(RegistrationType.Scoped),
+								new ServiceExport<IUserRepository, UserRepository>(RegistrationType.Scoped),
 
 								// Components
 
-								new ServiceExport<IAuthenticationComponent, AuthenticationComponent>(),
-								new ServiceExport<IShipperComponent, ShipperComponent>(),
+								new ServiceExport<IReverbSyncComponent, ReverbSyncComponent>(RegistrationType.Scoped),
+								new ServiceExport<IAuthenticationComponent, AuthenticationComponent>(RegistrationType.Scoped),
+								new ServiceExport<IUserComponent, UserComponent>(RegistrationType.Scoped),
+								new ServiceExport<IShipperComponent, ShipperComponent>(RegistrationType.Scoped),
 
 								// Providers
 
-								new ServiceExport<IAuthenticationProvider, AuthenticationProvider>(),
-								new ServiceExport<IShipperProvider, ShipperProvider>()
+								new ServiceExport<IAuthenticationProvider, AuthenticationProvider>(RegistrationType.Scoped),
+								new ServiceExport<IShipperProvider, ShipperProvider>(RegistrationType.Scoped),
+								new ServiceExport<IUserProvider, UserProvider>(RegistrationType.Scoped)
 						};
 
 						return services;
@@ -54,7 +68,10 @@ namespace Services.DesertMusic.Api.Configuration
 				{
 						var settings = new List<ISettingsExport>
 						{
-								new SettingsExport<ShipperRepositorySettings>()
+								new SettingsExport<ReverbClientSettings>(),
+								new SettingsExport<ReverbSyncRepositorySettings>(),
+								new SettingsExport<ShipperRepositorySettings>(),
+								new SettingsExport<UserRepositorySettings>()
 						};
 
 						return settings;

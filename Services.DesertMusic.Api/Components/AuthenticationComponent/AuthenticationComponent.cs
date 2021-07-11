@@ -12,88 +12,100 @@
  */
 
 
-using Common.Utilities.Authentication.Jwt;
+using Common.Models.UserManagement;
+using Common.Utilities.Exceptions.Authentication;
 using Common.Utilities.Helpers;
-using Common.Utilities.UserManagement.Components;
-using Common.Utilities.UserManagement.Models;
+using Common.Utilities.Jwt;
+using Common.Utilities.Jwt.Extensions;
+using Microsoft.AspNetCore.Http;
+using Services.DesertMusic.Api.Components.User;
 using Services.DesertMusic.Api.Models.Authentication;
 using System;
-using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Services.DesertMusic.Api.Components.AuthenticationComponent
 {
 		public interface IAuthenticationComponent
 		{
-				Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel);
-				Task<UserModel> CreateUser(UserModel model);
-				Task<TokenResponseModel> GetRefreshToken(string token);
+				Task<TokenResponseModel> Authenticate(UserModel user);
+				Task<TokenResponseModel> Refresh(HttpContext context);
 		}
 
 		public class AuthenticationComponent : IAuthenticationComponent
 		{
-				public AuthenticationComponent(IUserManagementComponent userManagementComponent,
-						IJwtTokenUtility jwtTokenUtility)
+				public AuthenticationComponent(IUserComponent userComponent,
+						IJwtTokenProvider jwtTokenProvider)
 				{
-						_userManagementComponent = userManagementComponent ?? throw new ArgumentNullException(nameof(userManagementComponent));
-						_jwtTokenUtility = jwtTokenUtility ?? throw new ArgumentNullException(nameof(jwtTokenUtility));
+						_userComponent = userComponent ?? throw new ArgumentNullException(nameof(userComponent));
+						_jwtTokenProvider = jwtTokenProvider ?? throw new ArgumentNullException(nameof(jwtTokenProvider));
 				}
 
-				public async Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel)
+				public async Task<TokenResponseModel> Authenticate(UserModel user)
 				{
 						try
 						{
-								var token = await _userManagementComponent.AuthenticateUser(authenticationModel);
+								var token = await _userComponent.AuthenticateUser(user);
 
-								var successful = new TokenResponseModel
+								var response = new TokenResponseModel
 								{
 										IsAuthenticated = true,
-										Token = token
+										Token = token,
 								};
 
-								return successful;
+								return response;
 						}
 
 						catch (Exception ex)
 						{
-								var failure = new TokenResponseModel
+								var response = new TokenResponseModel
 								{
 										IsAuthenticated = false,
 										Error = ex.Message
 								};
 
-								return failure;
+								return response;
 						}
 				}
 
-				public async Task<TokenResponseModel> GetRefreshToken(string token)
+				public async Task<TokenResponseModel> Refresh(HttpContext context)
 				{
-						await Task.Yield();
-
-						var refreshToken = _jwtTokenUtility.GetRefreshToken(token);
-
-						var response = new TokenResponseModel
+						try
 						{
-								IsAuthenticated = true,
-								Token = refreshToken
-						};
+								var bearer = context.GetBearerToken();
 
-						return response;
-				}
+								if (bearer == null)
+								{
+										throw new InvalidTokenException<AuthenticationComponent>(Caller.GetMethodName());
+								}
+								
+								var payload = await _jwtTokenProvider.GetPayload(bearer);
 
-				public async Task<UserModel> CreateUser(UserModel model)
-				{
-						var user = await _userManagementComponent.CreateUser(model);
+								payload.Refresh(_jwtTokenProvider.TokenLifetime);
 
-						if (!user)
-						{
-								throw new AuthenticationException($"{GetType()}: {Caller.GetMethodName()}: Failed to create user.");
+								var refreshToken = await _jwtTokenProvider.GetToken(payload);
+
+								var response = new TokenResponseModel
+								{
+										IsAuthenticated = true,
+										Token = refreshToken
+								};
+
+								return response;
 						}
 
-						return model;
+						catch (Exception ex)
+						{
+								var response = new TokenResponseModel
+								{
+										Error = ex.Message,
+										IsAuthenticated = false
+								};
+
+								return response;
+						}
 				}
 
-				private readonly IUserManagementComponent _userManagementComponent;
-				private readonly IJwtTokenUtility _jwtTokenUtility;
+				private readonly IUserComponent _userComponent;
+				private readonly IJwtTokenProvider _jwtTokenProvider;
 		}
 }

@@ -12,12 +12,11 @@
  */
 
 
+using Common.Models.UserManagement;
 using Common.Utilities.AspNetCore.Response.Extensions;
-using Common.Utilities.Authentication.Attributes;
-using Common.Utilities.UserManagement.Models;
+using Common.Utilities.Jwt.Middleware.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Services.DesertMusic.Api.Components;
-using Services.DesertMusic.Api.Models.Authentication;
 using System;
 using System.Threading.Tasks;
 
@@ -32,9 +31,9 @@ namespace Services.DesertMusic.Api.Controllers
 						_authenticationProvider = authenticationProvider ?? throw new ArgumentNullException(nameof(authenticationProvider));
 				}
 				
-				[HttpPost("Authenticate")]
+				[HttpPost("User")]
 				[BypassAuthentication]
-				public async Task<IActionResult> AuthenticateUser(AuthenticationModel model)
+				public async Task<IActionResult> AuthenticateUser(UserModel model)
 				{
 						var token = await _authenticationProvider.Authenticate(model);
 
@@ -42,11 +41,11 @@ namespace Services.DesertMusic.Api.Controllers
 				}
 
 				[HttpGet("Refresh")]
-				public async Task<IActionResult> Refresh()
+				public async Task<IActionResult> RefreshToken()
 				{
-						var refreshToken = await _authenticationProvider.GetRefreshToken(Request);
+						var result = await _authenticationProvider.Refresh(HttpContext);
 
-						return refreshToken.ToResponse();
+						return result.ToResponse();
 				}
 
 				private readonly IAuthenticationProvider _authenticationProvider;

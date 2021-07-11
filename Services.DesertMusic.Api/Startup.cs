@@ -12,12 +12,10 @@
  */
 
 
-using Common.Utilities.AspNetCore.Extensions;
-using Common.Utilities.Authentication.Jwt.Configuration;
-using Common.Utilities.Middleware.Authentication;
+using Common.Utilities.AspNetCore;
+using Common.Utilities.Configuration.Managed;
+using Common.Utilities.Jwt.Middleware;
 using Common.Utilities.Swagger;
-using Common.Utilities.UserManagement.Settings;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -33,26 +31,32 @@ namespace Services.DesertMusic.Api
 				public Startup(IConfiguration configuration,
 						IWebHostEnvironment hostEnvironment)
 				{
-						_hostEnvironment = hostEnvironment;
-
 						Configuration = configuration;
+						ManagedConfiguration = new ManagedConfiguration(hostEnvironment);
+
+						_hostEnvironment = hostEnvironment;
 				}
+
+				public IManagedConfiguration ManagedConfiguration { get; set; }
 
 				public IConfiguration Configuration { get; }
 
 				// This method gets called by the runtime. Use this method to add services to the container.
 				public void ConfigureServices(IServiceCollection services)
 				{
-						services.AddApplicationInsightsTelemetry();
-
 						services.AddControllers();
 
-						services.ConfigureAspNetCoreServices<DependencyExports>(_hostEnvironment);
+						var aspNetCoreOptions = new AspNetCoreConfigurationOptions
+						{
+								TokenLifetime = 60
+						};
 
-						services.ConfigureJwtAuthentication(Configuration);
+						if (_hostEnvironment.IsProduction())
+						{
+								aspNetCoreOptions.InjectAzureKeyVaultSecrets = true;
+						}
 
-						services.AddApplicationInsightsTelemetry();
-
+						services.ConfigureAspNetCoreServices<DependencyExports>(_hostEnvironment, aspNetCoreOptions);
 				}
 
 				// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,8 +74,6 @@ namespace Services.DesertMusic.Api
 						app.UseRouting();
 
 						app.UseAuthorization();
-
-						app.UseAuthentication();
 
 						app.UseMiddleware<JwtMiddleware>();
 

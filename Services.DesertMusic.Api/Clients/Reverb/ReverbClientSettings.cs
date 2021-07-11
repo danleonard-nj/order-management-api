@@ -12,10 +12,16 @@
  */
 
 
-namespace Services.DesertMusic.Api.Components.ShipperComponent.Data
+using Common.Utilities.Configuration.AzureKeyVault.Attributes;
+
+namespace Services.DesertMusic.Api.Clients.Reverb
 {
-		public class ShipperRepositorySettings
+		public class ReverbClientSettings
 		{
-				public string SqlConnectionString { get; set; }
+				public string BaseUrl { get; set; }
+
+				[AzureKeyVaultSecret]
+				public string ReverbBearerToken { get; set; }
+				public string Orders { get; set; }
 		}
 }

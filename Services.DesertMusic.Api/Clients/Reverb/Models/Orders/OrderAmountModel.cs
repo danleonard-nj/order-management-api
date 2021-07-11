@@ -12,9 +12,25 @@
  */
 
 
-namespace Services.DesertMusic.Api.Components.Purchasing
+using Newtonsoft.Json;
+
+namespace Services.DesertMusic.Api.Clients.Reverb.Models.Orders
 {
-		public class PurchasingComponent
+		public class OrderAmountModel
 		{
+				[JsonProperty(PropertyName = "amount")]
+				public string Amount { get; set; }
+
+				[JsonProperty(PropertyName = "amount_cents")]
+				public int? AmountCents { get; set; }
+
+				[JsonProperty(PropertyName = "currency")]
+				public string Currency { get; set; }
+
+				[JsonProperty(PropertyName = "symbol")]
+				public string Symbol { get; set; }
+
+				[JsonProperty(PropertyName = "display")]
+				public string Display { get; set; }
 		}
 }

@@ -11,9 +11,12 @@
  * for more details.
  */
 
-namespace Services.DesertMusic.Api.Components.OrderComponent
+
+namespace Services.DesertMusic.Api.Components.ReverbSyncComponent.Domain
 {
-		public class OrderComponent
+		public class OrderHash
 		{
+				public int OrderNumber { get; set; }
+				public string SyncOrderHashKey { get; set; }
 		}
 }

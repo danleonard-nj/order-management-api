@@ -11,9 +11,10 @@
  * for more details.
  */
 
-namespace Services.DesertMusic.Api.Components.ItemComponent
+
+namespace Services.DesertMusic.Api.Components.ProcurementComponent
 {
-		public class ItemComponent
+		public class ProcurementComponent
 		{
 		}
 }

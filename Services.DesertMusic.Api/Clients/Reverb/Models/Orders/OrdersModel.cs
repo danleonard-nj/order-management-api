@@ -11,9 +11,24 @@
  * for more details.
  */
 
-namespace Services.DesertMusic.Api.Components.ShipmentComponent
+
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
+namespace Services.DesertMusic.Api.Clients.Reverb.Models.Orders
 {
-		public class ShipmentComponent
+		public class OrdersModel
 		{
+				[JsonProperty(PropertyName = "total")]
+				public int Total { get; set; }
+
+				[JsonProperty(PropertyName = "current_page")]
+				public int CurrentPage { get; set; }
+
+				[JsonProperty(PropertyName = "total_pages")]
+				public int TotalPages { get; set; }
+
+				[JsonProperty(PropertyName = "orders")]
+				public IEnumerable<OrderModel> Orders { get; set; }
 		}
 }

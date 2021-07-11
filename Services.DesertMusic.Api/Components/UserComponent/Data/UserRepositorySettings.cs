@@ -12,10 +12,11 @@
  */
 
 
-namespace Services.DesertMusic.Api.Components.ShipperComponent.Data
+namespace Services.DesertMusic.Api.Components.User.Data
 {
-		public class ShipperRepositorySettings
+		public class UserRepositorySettings
 		{
 				public string SqlConnectionString { get; set; }
 		}
+
 }

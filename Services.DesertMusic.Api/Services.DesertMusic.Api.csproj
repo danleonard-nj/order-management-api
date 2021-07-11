@@ -2,30 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>2515f0e2-5442-4569-8d1a-238d788dc9d7</UserSecretsId>
-    <ApplicationInsightsResourceId>/subscriptions/0eff88f4-caa0-4b37-93e6-7389f7b3c5e1/resourceGroups/desert-music/providers/microsoft.insights/components/order-management-api</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Sync\**" />
-    <Content Remove="Models\Sync\**" />
-    <EmbeddedResource Remove="Models\Sync\**" />
-    <None Remove="Models\Sync\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Common.Utilities.AspNetCore" Version="2.4.9" />
+    <PackageReference Include="Common.Utilities.AspNetCore" Version="1.0.4" />
     <PackageReference Include="Flurl.Http" Version="3.2.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.17.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Components\ItemComponent\Data\" />
-    <Folder Include="Components\LinkingComponent\Data\" />
-    <Folder Include="Components\OrderComponent\Data\" />
-    <Folder Include="Components\PurchasingComponent\Data\" />
-    <Folder Include="Components\ShipmentComponent\Data\" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
 

@@ -12,9 +12,7 @@
  */
 
 
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Security.Authentication;
 
 namespace Services.DesertMusic.Api.Utilities.Extensions
 {
@@ -23,23 +21,6 @@ namespace Services.DesertMusic.Api.Utilities.Extensions
 				public static string AppendLine(this string value, string toAppend)
 				{
 						return value + Environment.NewLine + toAppend;
-				}
-
-				public static string GetBearer(this HttpRequest request)
-				{
-						if (request.Headers.ContainsKey("Authorization"))
-						{
-								var header = request.Headers["Authorization"].ToString();
-
-								var bearer = header.Split(" ")[1];
-
-								return bearer;
-						}
-
-						else
-						{
-								throw new AuthenticationException("No authorization found in request.");
-						}	
 				}
 		}
 }

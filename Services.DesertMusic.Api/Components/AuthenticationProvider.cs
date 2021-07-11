@@ -12,50 +12,40 @@
  */
 
 
-using Common.Utilities.UserManagement.Models;
+using Common.Models.UserManagement;
 using Microsoft.AspNetCore.Http;
 using Services.DesertMusic.Api.Components.AuthenticationComponent;
 using Services.DesertMusic.Api.Models.Authentication;
-using Services.DesertMusic.Api.Utilities.Extensions;
+using System;
 using System.Threading.Tasks;
 
 namespace Services.DesertMusic.Api.Components
 {
 		public interface IAuthenticationProvider
 		{
-				Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel);
-				Task<UserModel> CreateUser(UserModel model);
-				Task<TokenResponseModel> GetRefreshToken(HttpRequest request);
+				Task<TokenResponseModel> Authenticate(UserModel user);
+				Task<TokenResponseModel> Refresh(HttpContext context);
 		}
 
 		public class AuthenticationProvider : IAuthenticationProvider
 		{
 				public AuthenticationProvider(IAuthenticationComponent authenticationComponent)
 				{
-						_authenticationComponent = authenticationComponent;
+						_authenticationComponent = authenticationComponent ?? throw new ArgumentNullException(nameof(authenticationComponent));
 				}
 
-				public async Task<TokenResponseModel> Authenticate(AuthenticationModel authenticationModel)
+				public async Task<TokenResponseModel> Authenticate(UserModel user)
 				{
-						var token = await _authenticationComponent.Authenticate(authenticationModel);
+						var response = await _authenticationComponent.Authenticate(user);
 
-						return token;
+						return response;
 				}
 
-				public async Task<TokenResponseModel> GetRefreshToken(HttpRequest request)
+				public async Task<TokenResponseModel> Refresh(HttpContext context)
 				{
-						var bearer = request.GetBearer();
+						var response = await _authenticationComponent.Refresh(context);
 
-						var refreshToken = await _authenticationComponent.GetRefreshToken(bearer);
-
-						return refreshToken;
-				}
-
-				public async Task<UserModel> CreateUser(UserModel model)
-				{
-						var user = await _authenticationComponent.CreateUser(model);
-
-						return user;
+						return response;
 				}
 
 				private readonly IAuthenticationComponent _authenticationComponent;

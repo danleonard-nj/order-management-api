@@ -11,9 +11,11 @@
  * for more details.
  */
 
-namespace Services.DesertMusic.Api.Components.LinkingComponent
+
+namespace Services.DesertMusic.Api.Components.ReverbSyncComponent.Data
 {
-		public class LinkingComponent
+		public class ReverbSyncRepositorySettings
 		{
+				public string SqlConnectionString { get; set; }
 		}
 }
